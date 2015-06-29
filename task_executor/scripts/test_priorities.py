@@ -32,7 +32,7 @@ if __name__ == '__main__':
 
   #for simplicity all tasks happens in same locations
   
-  test = 12
+  test = 13
 
   #Test A - tasks with same priority, all valid tasks
   #Travel duration is 10!
@@ -70,7 +70,7 @@ if __name__ == '__main__':
     st = rospy.Time.now()  
     for i in range(0,5):
       tasks = []
-      tasks.append(create_wait_task('h_2', st, st+rospy.Duration(75), rospy.Duration(5),2))
+      tasks.append(create_wait_task('h_2', st, st+rospy.Duration(85), rospy.Duration(5),2))
       task_id = add_task(tasks)
       set_execution_status(True) # Set the task executor running (if it isn't already)
       rospy.sleep(2) 
@@ -161,6 +161,21 @@ if __name__ == '__main__':
     tasks.append(create_wait_task('h_2', st, st+rospy.Duration(65), rospy.Duration(50),2))
 
     task_id = add_task(tasks)
+
+  elif(test==13):
+    #test C2 - 1 task with time window equal to duration arrives, before it gets executed, another arrives
+
+    tasks = []
+    st = rospy.Time.now()  
+    tasks.append(create_wait_task('h_2', st+rospy.Duration(60), st+rospy.Duration(80), rospy.Duration(20),1))
+    task_id = add_task(tasks)
+    set_execution_status(True) # Set the task executor running (if it isn't already)
+    rospy.sleep(49.91)
+    tasks = []
+    tasks.append(create_wait_task('h_2', st+rospy.Duration(100), st+rospy.Duration(120), rospy.Duration(20),1))
+    task_id = add_task(tasks)
+    set_execution_status(True)
+
 
  #TODO test if non-interruptable tasks
 

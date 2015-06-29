@@ -334,7 +334,13 @@ class ScheduledTaskExecutor(AbstractTaskExecutor):
                   dropped_tasks.append(task)
                 else: #if task have higher priority, we want to propagate it, it might be scheduled as on demand task later in code
                   bounded_tasks.append(task)      
-      else: #there is no active task, thus we just check if task can be done according now() time        
+      else: #there is no active task, thus we just check if task can be done according now() time   
+        amount_of_scheduled_tasks = len(self.execution_schedule.execution_queue) #this was add in order to start with the start of next to be executed task
+        if amount_of_scheduled_tasks > 0:
+          first_task_time = self.execution_schedule.execution_queue[0].execution_time
+          if first_task_time < start_after:
+            start_after = first_task_time
+        print "bounding tasks"     
         for task in tasks:
             # if it's still executable after the bound
             if start_after + task.max_duration <= task.end_before:
